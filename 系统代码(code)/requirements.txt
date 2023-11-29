@@ -1,0 +1,8 @@
+numpy
+tensorflow
+opencv-python<4
+matplotlib==3.0.3
+scipy
+scikit-image
+sympy
+flask
