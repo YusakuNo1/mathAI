@@ -37,7 +37,7 @@ def detect_uncontinous_symbols(symbols,original_img):
                 # 从原图提取待识别的图片
                 extracted_img = tools.extract_img(location,original_img)
                 # 识别字符 这里每次都需要calling model，可以进一步优化
-                predict_input_fn = tf.estimator.inputs.numpy_input_fn(
+                predict_input_fn = tf.compat.v1.estimator.inputs.numpy_input_fn(
                     x={"x":tools.normalize_matrix_value([extracted_img]+sub_symbol)},
                     shuffle=False)
                 predictions = tools.cnn_symbol_classifier.predict(input_fn=predict_input_fn)
@@ -115,7 +115,7 @@ def detect_functions(symbols,original_img):
         # print([x['start_index'] for x in t_symbols])
         img_to_predict = [x['src_img'] for x in t_symbols]
         # 识别字符 这里每次都需要calling model，可以进一步优化
-        predict_input_fn = tf.estimator.inputs.numpy_input_fn(
+        predict_input_fn = tf.compat.v1.estimator.inputs.numpy_input_fn(
             x={"x": tools.normalize_matrix_value(img_to_predict)},
             shuffle=False)
         predictions = tools.cnn_symbol_classifier.predict(input_fn=predict_input_fn)

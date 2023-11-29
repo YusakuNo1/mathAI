@@ -18,7 +18,7 @@ tensors_to_log = {"probabilities": "softmax_tensor"}
 logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=50)
 #这是训练cnn模型的，如果需要继续训练，则去除下面的注释，一般情况下不需要再训练
 # # train the model
-# train_input_fn = tf.estimator.inputs.numpy_input_fn(
+# train_input_fn = tf.compat.v1.estimator.inputs.numpy_input_fn(
 #     x={"x": train_data},
 #     y=train_data_labels,
 #     batch_size=100,
@@ -31,7 +31,7 @@ logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=5
 #     hooks=[logging_hook])
 
 # evaluate the model and print results
-eval_input_fn = tf.estimator.inputs.numpy_input_fn(
+eval_input_fn = tf.compat.v1.estimator.inputs.numpy_input_fn(
     x={"x": eval_data},
     y=eval_data_labels,
     num_epochs=1,

@@ -63,7 +63,7 @@ def cnn_model_fn(features, labels, mode):
 
   # Add dropout operation; 0.6 probability that element will be kept
   dropout = tf.compat.v1.layers.dropout(
-      inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
+      inputs=dense, rate=0.4, training=mode == tf.compat.v1.estimator.ModeKeys.TRAIN)
 
   # Logits layer
   # Input Tensor Shape: [batch_size, 1024]
@@ -77,27 +77,27 @@ def cnn_model_fn(features, labels, mode):
       # `logging_hook`.
       "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
   }
-  if mode == tf.estimator.ModeKeys.PREDICT:
+  if mode == tf.compat.v1.estimator.ModeKeys.PREDICT:
     # sess = tf.InteractiveSession()
     # print('logits:',logits.eval(session = sess))
-    return tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)
+    return tf.compat.v1.estimator.EstimatorSpec(mode=mode, predictions=predictions)
 
   # Calculate Loss (for both TRAIN and EVAL modes)
   loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
 
   # Configure the Training Op (for TRAIN mode)
-  if mode == tf.estimator.ModeKeys.TRAIN:
+  if mode == tf.compat.v1.estimator.ModeKeys.TRAIN:
     optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
     train_op = optimizer.minimize(
         loss=loss,
         global_step=tf.train.get_global_step())
-    return tf.estimator.EstimatorSpec(mode=mode, loss=loss, train_op=train_op)
+    return tf.compat.v1.estimator.EstimatorSpec(mode=mode, loss=loss, train_op=train_op)
 
   # Add evaluation metrics (for EVAL mode)
   eval_metric_ops = {
       "accuracy": tf.metrics.accuracy(
           labels=labels, predictions=predictions["classes"])}
-  return tf.estimator.EstimatorSpec(
+  return tf.compat.v1.estimator.EstimatorSpec(
       mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
 # def cnn_model_fn(features, labels, mode):
 #   """Model function for CNN."""
@@ -155,7 +155,7 @@ def cnn_model_fn(features, labels, mode):
 #
 #   # Add dropout operation; 0.6 probability that element will be kept
 #   dropout = tf.compat.v1.layers.dropout(
-#       inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
+#       inputs=dense, rate=0.4, training=mode == tf.compat.v1.estimator.ModeKeys.TRAIN)
 #
 #   # Logits layer
 #   # Input Tensor Shape: [batch_size, 1024]
@@ -169,31 +169,31 @@ def cnn_model_fn(features, labels, mode):
 #       # `logging_hook`.
 #       "probabilities": tf.nn.softmax(logits, name="softmax_tensor")
 #   }
-#   if mode == tf.estimator.ModeKeys.PREDICT:
-#     return tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)
+#   if mode == tf.compat.v1.estimator.ModeKeys.PREDICT:
+#     return tf.compat.v1.estimator.EstimatorSpec(mode=mode, predictions=predictions)
 #
 #   # Calculate Loss (for both TRAIN and EVAL modes)
 #   loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
 #
 #   # Configure the Training Op (for TRAIN mode)
-#   if mode == tf.estimator.ModeKeys.TRAIN:
+#   if mode == tf.compat.v1.estimator.ModeKeys.TRAIN:
 #     optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
 #     train_op = optimizer.minimize(
 #         loss=loss,
 #         global_step=tf.train.get_global_step())
-#     return tf.estimator.EstimatorSpec(mode=mode, loss=loss, train_op=train_op)
+#     return tf.compat.v1.estimator.EstimatorSpec(mode=mode, loss=loss, train_op=train_op)
 #
 #   # Add evaluation metrics (for EVAL mode)
 #   eval_metric_ops = {
 #       "accuracy": tf.metrics.accuracy(
 #           labels=labels, predictions=predictions["classes"])}
-#   return tf.estimator.EstimatorSpec(
+#   return tf.compat.v1.estimator.EstimatorSpec(
 #       mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
 
 
 # 定义一个分类器供其他模块引用
 # create the estimator
-cnn_symbol_classifier = tf.estimator.Estimator(
+cnn_symbol_classifier = tf.compat.v1.estimator.Estimator(
   model_fn=cnn_model_fn, model_dir=MODEL_DIR)
 
 # cnn分类器训练函数
@@ -206,7 +206,7 @@ def train_cnn_model(steps):
     logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=50)
 
     # train the model
-    train_input_fn = tf.estimator.inputs.numpy_input_fn(
+    train_input_fn = tf.compat.v1.estimator.inputs.numpy_input_fn(
         x={"x": train_data},
         y=train_data_labels,
         batch_size=100,
@@ -221,7 +221,7 @@ def train_cnn_model(steps):
 def eval_cnn_model():
     eval_data, eval_data_labels, filelist = read_img_file('eval')
     # evaluate the model and print results
-    eval_input_fn = tf.estimator.inputs.numpy_input_fn(
+    eval_input_fn = tf.compat.v1.estimator.inputs.numpy_input_fn(
         x={"x": eval_data},
         y=eval_data_labels,
         num_epochs=1,
