@@ -13,7 +13,7 @@ def read_img_and_convert_to_binary(filename):
     original_img = cv2.imread(filename)
     # print(original_img)
     #将原图分辨率缩小SCALSIZE倍，减少计算复杂度
-    original_img = cv2.resize(original_img,(np.int(original_img.shape[1]/SCALSIZE),np.int(original_img.shape[0]/SCALSIZE)), interpolation=cv2.INTER_AREA)
+    original_img = cv2.resize(original_img,(np.int_(original_img.shape[1]/SCALSIZE),np.int_(original_img.shape[0]/SCALSIZE)), interpolation=cv2.INTER_AREA)
     #降噪
     blur = cv2.GaussianBlur(original_img, (5, 5), 0)
     #将彩色图转化成灰度图

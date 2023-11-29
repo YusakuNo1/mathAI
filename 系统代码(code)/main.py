@@ -43,7 +43,7 @@ index = 1
 
 symbols_to_be_predicted = normalize_matrix_value([x['src_img'] for x in symbols])
 
-predict_input_fn = tf.estimator.inputs.numpy_input_fn(
+predict_input_fn = tf.compat.v1.estimator.inputs.numpy_input_fn(
     x={"x": np.array(symbols_to_be_predicted)},
     shuffle=False)
 

@@ -32,14 +32,14 @@ def match(expected):
     #print('expected node:', expected,next_index,length)
 
     # #print('length,index',length,next_index)
-    if isinstance(expected,np.str) and current_node['structure'] == expected:
+    if (isinstance(expected,np.str_) or isinstance(expected, str)) and current_node['structure'] == expected:
         if next_index<length:
             current_node = node_list[next_index]
             next_index = next_index+1
         else:
             pass
         # #print('current_node:',current_node)
-    elif isinstance(expected,np.int) and current_node['type'] == expected and next_index<length:
+    elif isinstance(expected,np.int_) and current_node['type'] == expected and next_index<length:
         # current_node = node_list[next_index]
         # next_index = next_index + 1
         if next_index<length:

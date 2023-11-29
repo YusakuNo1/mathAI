@@ -6,7 +6,7 @@ from tools.image_input import read_img_file
 import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
-tf.logging.set_verbosity(tf.logging.INFO)
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.INFO)
 def cnn_model_fn(features, labels, mode):
   """Model function for CNN."""
   # Input Layer
@@ -19,7 +19,7 @@ def cnn_model_fn(features, labels, mode):
   # Padding is added to preserve width and height.
   # Input Tensor Shape: [batch_size, 28, 28, 1]
   # Output Tensor Shape: [batch_size, 28, 28, 32]
-  conv1 = tf.layers.conv2d(
+  conv1 = tf.compat.v1.layers.conv2d(
       inputs=input_layer,
       filters=32,
       kernel_size=[3, 3],
@@ -30,14 +30,14 @@ def cnn_model_fn(features, labels, mode):
   # First max pooling layer with a 3x3 filter and stride of 3
   # Input Tensor Shape: [batch_size, 45, 45, 32]
   # Output Tensor Shape: [batch_size, 15, 15, 32]
-  pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[3, 3], strides=3)
+  pool1 = tf.compat.v1.layers.max_pooling2d(inputs=conv1, pool_size=[3, 3], strides=3)
 
   # Convolutional Layer #2
   # Computes 64 features using a 5x5 filter.
   # Padding is added to preserve width and height.
   # Input Tensor Shape: [batch_size, 15, 15, 32]
   # Output Tensor Shape: [batch_size, 15, 15, 64]
-  conv2 = tf.layers.conv2d(
+  conv2 = tf.compat.v1.layers.conv2d(
       inputs=pool1,
       filters=64,
       kernel_size=[3, 3],
@@ -48,7 +48,7 @@ def cnn_model_fn(features, labels, mode):
   # Second max pooling layer with a 3x3 filter and stride of 3
   # Input Tensor Shape: [batch_size, 15, 15, 64]
   # Output Tensor Shape: [batch_size, 5, 5, 64]
-  pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[3, 3], strides=3)
+  pool2 = tf.compat.v1.layers.max_pooling2d(inputs=conv2, pool_size=[3, 3], strides=3)
 
   # Flatten tensor into a batch of vectors
   # Input Tensor Shape: [batch_size, 5, 5, 64]
@@ -59,16 +59,16 @@ def cnn_model_fn(features, labels, mode):
   # Densely connected layer with 1024 neurons
   # Input Tensor Shape: [batch_size, 5 * 5 * 64]
   # Output Tensor Shape: [batch_size, 1024]
-  dense = tf.layers.dense(inputs=pool2_flat, units=1024, activation=tf.nn.relu)
+  dense = tf.compat.v1.layers.dense(inputs=pool2_flat, units=1024, activation=tf.nn.relu)
 
   # Add dropout operation; 0.6 probability that element will be kept
-  dropout = tf.layers.dropout(
+  dropout = tf.compat.v1.layers.dropout(
       inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
 
   # Logits layer
   # Input Tensor Shape: [batch_size, 1024]
   # Output Tensor Shape: [batch_size, 32]
-  logits = tf.layers.dense(inputs=dropout, units=32)
+  logits = tf.compat.v1.layers.dense(inputs=dropout, units=32)
 
   predictions = {
       # Generate predictions (for PREDICT and EVAL mode)
@@ -111,7 +111,7 @@ def cnn_model_fn(features, labels, mode):
 #   # Padding is added to preserve width and height.
 #   # Input Tensor Shape: [batch_size, 28, 28, 1]
 #   # Output Tensor Shape: [batch_size, 28, 28, 32]
-#   conv1 = tf.layers.conv2d(
+#   conv1 = tf.compat.v1.layers.conv2d(
 #       inputs=input_layer,
 #       filters=32,
 #       kernel_size=[5, 5],
@@ -122,14 +122,14 @@ def cnn_model_fn(features, labels, mode):
 #   # First max pooling layer with a 3x3 filter and stride of 3
 #   # Input Tensor Shape: [batch_size, 45, 45, 32]
 #   # Output Tensor Shape: [batch_size, 15, 15, 32]
-#   pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=[3, 3], strides=3)
+#   pool1 = tf.compat.v1.layers.max_pooling2d(inputs=conv1, pool_size=[3, 3], strides=3)
 #
 #   # Convolutional Layer #2
 #   # Computes 64 features using a 5x5 filter.
 #   # Padding is added to preserve width and height.
 #   # Input Tensor Shape: [batch_size, 15, 15, 32]
 #   # Output Tensor Shape: [batch_size, 15, 15, 64]
-#   conv2 = tf.layers.conv2d(
+#   conv2 = tf.compat.v1.layers.conv2d(
 #       inputs=pool1,
 #       filters=64,
 #       kernel_size=[5, 5],
@@ -140,7 +140,7 @@ def cnn_model_fn(features, labels, mode):
 #   # Second max pooling layer with a 3x3 filter and stride of 3
 #   # Input Tensor Shape: [batch_size, 15, 15, 64]
 #   # Output Tensor Shape: [batch_size, 5, 5, 64]
-#   pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[3, 3], strides=3)
+#   pool2 = tf.compat.v1.layers.max_pooling2d(inputs=conv2, pool_size=[3, 3], strides=3)
 #
 #   # Flatten tensor into a batch of vectors
 #   # Input Tensor Shape: [batch_size, 5, 5, 64]
@@ -151,16 +151,16 @@ def cnn_model_fn(features, labels, mode):
 #   # Densely connected layer with 1024 neurons
 #   # Input Tensor Shape: [batch_size, 5 * 5 * 64]
 #   # Output Tensor Shape: [batch_size, 1024]
-#   dense = tf.layers.dense(inputs=pool2_flat, units=1024, activation=tf.nn.relu)
+#   dense = tf.compat.v1.layers.dense(inputs=pool2_flat, units=1024, activation=tf.nn.relu)
 #
 #   # Add dropout operation; 0.6 probability that element will be kept
-#   dropout = tf.layers.dropout(
+#   dropout = tf.compat.v1.layers.dropout(
 #       inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
 #
 #   # Logits layer
 #   # Input Tensor Shape: [batch_size, 1024]
 #   # Output Tensor Shape: [batch_size, 32]
-#   logits = tf.layers.dense(inputs=dropout, units=32)
+#   logits = tf.compat.v1.layers.dense(inputs=dropout, units=32)
 #
 #   predictions = {
 #       # Generate predictions (for PREDICT and EVAL mode)
